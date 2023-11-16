@@ -1,23 +1,23 @@
 version: 0.2
 phases:
-install:
-commands:
-- echo install step...
+  install:
+    commands:
+      - echo install step...
 pre_build:
-commands:
-- echo logging in to AWS ECR...
-- $(aws ecr get-login --no-include-email --region us-west-2)
+  commands:
+    - echo logging in to AWS ECR...
+    - $(aws ecr get-login --no-include-email --region us-west-2)
 build:
-commands:
-- echo build Docker image on `date`
-- docker build -t s2-g4-repo:latest .
-- docker tag s2-g4-repo:latest 962804699607.dkr.ecr.us-west-2.amazonaws.com/s2-g4-repo:latest
+  commands:
+    - echo build Docker image on `date`
+    - docker build -t s2-g4-repo:latest .
+    - docker tag s2-g4-repo:latest 962804699607.dkr.ecr.us-west-2.amazonaws.com/s2-g4-repo:latest
 post_build:
-commands:
-- echo build Docker image complete `date`
-- echo push latest Docker images to ECR...
-- docker push 962804699607.dkr.ecr.us-west-2.amazonaws.com/s2-g4-repo:latest 
-- echo Writing image definitions file...
-- printf '[{"name":"s2-g4-container","imageUri":"962804699607.dkr.ecr.us-west-2.amazonaws.com/s2-g4-repo:latest"}]' > imagedefinitions.json
+  commands:
+    - echo build Docker image complete `date`
+    - echo push latest Docker images to ECR...
+    - docker push 962804699607.dkr.ecr.us-west-2.amazonaws.com/s2-g4-repo:latest 
+    - echo Writing image definitions file...
+    - printf '[{"name":"s2-g4-container","imageUri":"962804699607.dkr.ecr.us-west-2.amazonaws.com/s2-g4-repo:latest"}]' > imagedefinitions.json
 artifacts:
-files: imagedefinitions.json
+  files: imagedefinitions.json
